@@ -14,7 +14,7 @@ console.log("shortNames", shortNames);
 //// Challenge (optional) Combined Transformation
 
 const scores: number[] = [20, 30, 40, 50, 70, 80, 90, 100];
-const personWhoPassed = scores
+const personWhoPassed: string[] = scores
   .filter((grad) => grad >= 50)
   .map((score) => {
     let grade;
@@ -28,7 +28,7 @@ const personWhoPassed = scores
     return grade;
   });
 
-const personWhoFailed = scores.filter((grad) => grad < 50);
+const personWhoFailed: number[] = scores.filter((grad) => grad < 50);
 
 console.log("personWhoPassed", personWhoPassed);
 console.log(
