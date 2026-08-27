@@ -90,3 +90,23 @@ const getMoviesByGenre = (movies: MovieType[], genre: string): MovieType[] => {
 };
 
 console.log("getMoviesByGenre", getMoviesByGenre(movies, "SCI-Fi"));
+
+const getMoviesByGenreTwo = (
+  movies: MovieType[],
+  genre: string,
+): MovieType[] => {
+  const moviesWithLowercaseGenres = movies
+    .map((film) => {
+      const genresToLowerCase = film.genres.map((type) => type.toLowerCase());
+
+      return {
+        ...film,
+        genres: genresToLowerCase,
+      };
+    })
+    .filter((it) => it.genres.includes(genre.toLowerCase()));
+
+  return moviesWithLowercaseGenres;
+};
+
+console.log("getMoviesByGenreTwo", getMoviesByGenreTwo(movies, "SCI-Fi"));
