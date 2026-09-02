@@ -1,7 +1,7 @@
 
 
 
-const name: string = "Marco";
+const studentName: string= "Marco";
 const age: number = 43;
 const isEnrolled: boolean = false;
 
@@ -9,7 +9,7 @@ const describeStudent = (student: string, age: number): string => {
   return `${student} is ${age} years old `;
 };
 
-console.log(describeStudent(name, age));
+console.log(describeStudent(studentName, age));
 
 // second question in skill one
 
