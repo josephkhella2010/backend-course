@@ -1,112 +1,69 @@
-///Book Interface
+//Skill 3: Enums (fixed list of options)
 
-interface BookType {
-  title: string;
-  author: string;
-  pages: number;
+//A- Color Picker
+
+enum Color {
+  Red,
+  Green,
+  Blue,
 }
 
-const book: BookType = {
-  title: "Harry Potter",
-  author: "King",
-  pages: 320,
+const showColor = (color: Color): string => {
+  if (color === Color.Red) {
+    return `Red`;
+  } else if (color === Color.Green) {
+    return `Green.`;
+  } else {
+    return `Blue.`;
+  }
 };
-console.log("Title", book.title);
 
-/// Nested & Optional Properties
+console.log(showColor(Color.Red));
+console.log(showColor(Color.Green));
+console.log(showColor(Color.Blue));
 
-interface AddressType {
-  city: string;
-  postalCode?: string;
+//B- Pizza Order
+enum PizzaSizeType {
+  Small,
+  Medium,
+  Large,
 }
 
-interface PersonType {
-  name: string;
-  age: number;
-  address: AddressType;
+const orderPizza = (pizzaSize: PizzaSizeType): string => {
+  if (pizzaSize === PizzaSizeType.Large) {
+    return `You ordered a Large pizza.`;
+  } else if (pizzaSize === PizzaSizeType.Medium) {
+    return `You ordered a Medium pizza.`;
+  } else {
+    return `You ordered a Small pizza.`;
+  }
+};
+
+console.log(orderPizza(PizzaSizeType.Large));
+console.log(orderPizza(PizzaSizeType.Medium));
+console.log(orderPizza(PizzaSizeType.Small));
+
+//c- Challenge (optional) Role-Based Access
+
+enum RoleType {
+  Admin,
+  User,
+  Guest,
 }
 
-const personOne: PersonType = {
-  name: "John",
-  age: 30,
-  address: {
-    city: "sweden",
-  },
-};
-const personTwo: PersonType = {
-  name: "John",
-  age: 30,
-  address: {
-    city: "Italy",
-    postalCode: "176545",
-  },
+const printRole = (role: RoleType): string => {
+  switch (role) {
+    case RoleType.Admin:
+      return "You have full access";
+
+    case RoleType.User:
+      return "You have limited access";
+
+    case RoleType.Guest:
+      return "You have guest access";
+  }
 };
 
-console.log("city", personOne.address.city, personTwo.address.city);
-
-///// Challenge (optional) Interface with a Typed Function
-
-interface MovieType {
-  id: number;
-  title: string;
-  rating: number;
-  genres: string[];
-}
-
-const movies: MovieType[] = [
-  {
-    id: 1,
-    title: "Inception",
-    rating: 8.8,
-    genres: ["Sci-Fi", "Thriller"],
-  },
-  {
-    id: 2,
-    title: "The Dark Knight",
-    rating: 9.0,
-    genres: ["Action", "Crime", "Drama"],
-  },
-  {
-    id: 3,
-    title: "Interstellar",
-    rating: 8.7,
-    genres: ["Sci-Fi", "Adventure"],
-  },
-  {
-    id: 4,
-    title: "The Lion King",
-    rating: 8.5,
-    genres: ["Animation", "Adventure", "Drama"],
-  },
-];
-
-const getMoviesByGenre = (movies: MovieType[], genre: string): MovieType[] => {
-  const filteredMovies = movies.filter((film) =>
-    film.genres.some(
-      (genreName) => genreName.toLowerCase() === genre.toLowerCase(),
-    ),
-  );
-  return filteredMovies;
-};
-
-console.log("getMoviesByGenre", getMoviesByGenre(movies, "SCI-Fi"));
-
-const getMoviesByGenreTwo = (
-  movies: MovieType[],
-  genre: string,
-): MovieType[] => {
-  const moviesWithLowercaseGenres = movies
-    .map((film) => {
-      const genresToLowerCase = film.genres.map((type) => type.toLowerCase());
-
-      return {
-        ...film,
-        genres: genresToLowerCase,
-      };
-    })
-    .filter((it) => it.genres.includes(genre.toLowerCase()));
-
-  return moviesWithLowercaseGenres;
-};
-
-console.log("getMoviesByGenreTwo", getMoviesByGenreTwo(movies, "SCI-Fi"));
+console.log(printRole(RoleType.Admin));
+console.log(printRole(RoleType.User));
+console.log(printRole(RoleType.Guest));
