@@ -1,58 +1,31 @@
-interface ProductType {
-  id: number;
-  name: string;
-  price: number;
-  tags: string[];
-}
+//Skill 4: Generics (<T> means reusable placeholder)
 
-const products: ProductType[] = [
-  {
-    id: 1,
-    name: "Laptop",
-    price: 1100,
-    tags: ["electronics", "computer", "work"],
-  },
-  {
-    id: 2,
-    name: "Headphones",
-    price: 890,
-    tags: ["electronics"],
-  },
-  {
-    id: 3,
-    name: "Backpack",
-    price: 590,
-    tags: ["bags", "travel", "school", "work"],
-  },
-  {
-    id: 4,
-    name: "Keyboard",
-    price: 750,
-    tags: ["electronics", "computer", "gaming", "work"],
-  },
-  {
-    id: 5,
-    name: "Coffee Mug",
-    price: 1500,
-    tags: ["work"],
-  },
-];
+//A- Wrap It Up
 
-const filteredByPrice: ProductType[] = products.filter(
-  (item) => item.price < 1000,
-);
-console.log("filteredByPrice", filteredByPrice);
+const wrapInArray = <T>(item: T): T[] => {
+  return [item];
+};
 
-const workProducts: string[] = products
-  .filter((item) => item.tags.includes("work"))
-  .map((item) => item.name);
+console.log(wrapInArray("cat"));
+console.log(wrapInArray(1));
 
-console.log("Work products:", workProducts);
+//B- First in Line
 
-//Challenge (optional) Filter + Map + Join
-const expensiveProducts: string = products
-  .filter((item) => item.tags.length > 1)
-  .map((item) => `${item.name} -  ${item.price}`)
-  .join(" , ");
+const firstItem = <T>(array: T[], val: number): T => {
+  const getFirstItem = array[val];
+  return getFirstItem;
+};
 
-console.log("expensiveProducts", expensiveProducts);
+console.log(firstItem(["marco", "harvey", "robert", "john"], 0));
+console.log(firstItem([10, 20, 30, 40], 0));
+
+// C- Challenge (optional) Swap Places
+const swap = <T>(itemOne: T, itemTwo: T): T[] => {
+  [itemOne, itemTwo] = [itemTwo, itemOne];
+  const newArr = [itemOne, itemTwo];
+
+  return newArr;
+};
+
+console.log(swap(1, 2));
+console.log(swap("Hello", "welcome"));

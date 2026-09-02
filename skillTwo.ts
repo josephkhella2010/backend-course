@@ -1,37 +1,63 @@
-///////Doubling Ages
+// Skill 2: Interfaces & Type Aliases (& means AND)
 
-const ages: number[] = [10, 20, 30, 40, 50];
-const agesInFiveYears: number[] = ages.map((it) => it + 5);
-console.log("agesInFiveYears", agesInFiveYears);
+// A- Book Interface
 
-///////Filtering Names
+interface BookType {
+  title: string;
+  pages: number;
+}
 
-const names: string[] = ["Jonathan", "Goergo", "Mary", "Maria", "Adam", "Eva"];
+const book: BookType = {
+  title: "Harry Botter",
+  pages: 350,
+};
 
-const shortNames = names.filter((na) => na.length <= 4);
-console.log("shortNames", shortNames);
+const describeBook = (book: BookType): string => {
+  return `The book ${book.title} has ${book.pages} pages`;
+};
 
-//// Challenge (optional) Combined Transformation
+console.log(describeBook(book));
 
-const scores: number[] = [20, 30, 40, 50, 70, 80, 90, 100];
-const personWhoPassed: string[] = scores
-  .filter((grad) => grad >= 50)
-  .map((score) => {
-    let grade;
-    if (score >= 86) {
-      grade = "A";
-    } else if (score >= 70) {
-      grade = "B";
-    } else {
-      grade = "C";
-    }
-    return grade;
-  });
+// B- Combining Interfaces
 
-const personWhoFailed: number[] = scores.filter((grad) => grad < 50);
+interface TeacherType {
+  name: string;
+  subject: string;
+}
+interface EmployeeType {
+  id: number;
+  email: string;
+}
 
-console.log("personWhoPassed", personWhoPassed);
+type SchoolTeacher = TeacherType & EmployeeType;
+
+const printTeacherInfo = (info: SchoolTeacher): string => {
+  return `teacher name: ${info.name} - subject:- ${info.subject} - employee id: ${info.id} - employee email: ${info.email} `;
+};
+
 console.log(
-  "personWhoFailed",
-  ` there are ${personWhoFailed.length} failed in exam`,
+  printTeacherInfo({
+    name: "Rechard",
+    subject: "Science",
+    id: 1,
+    email: "rechard@gmail.com",
+  }),
+);
+
+// c- Challenge (optional) Favorite Car
+
+interface CarType {
+  brand: string;
+  year: number;
+}
+
+const printCar = (favoraitCar: CarType): string => {
+  return `Brand:${favoraitCar.brand} ,  Year:${favoraitCar.year}`;
+};
+
+console.log(
+  printCar({
+    brand: "Tyoyta",
+    year: 2022,
+  }),
 );
