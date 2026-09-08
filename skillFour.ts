@@ -1,31 +1,78 @@
-//Skill 4: Generics (<T> means reusable placeholder)
+ //Skill 4: Promises
 
-//A- Wrap It Up
+// 1- Your Own Promise
 
-const wrapInArray = <T>(item: T): T[] => {
-  return [item];
-};
 
-console.log(wrapInArray("cat"));
-console.log(wrapInArray(1));
+const checkStock = new Promise<string>((resolve, reject) => {
+  console.log("Checking stock...");
 
-//B- First in Line
+  const inStock: boolean = true;
 
-const firstItem = <T>(array: T[], val: number): T => {
-  const getFirstItem = array[val];
-  return getFirstItem;
-};
+  if (inStock) {
+    resolve("Item is in stock!");
+  } else {
+    reject("Item is out of stock!");
+  }
 
-console.log(firstItem(["marco", "harvey", "robert", "john"], 0));
-console.log(firstItem([10, 20, 30, 40], 0));
+  console.log("Promise created!");
+})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => {
+    console.log("error in promise", err);
+  });
 
-// C- Challenge (optional) Swap Places
-const swap = <T>(itemOne: T, itemTwo: T): T[] => {
-  [itemOne, itemTwo] = [itemTwo, itemOne];
-  const newArr = [itemOne, itemTwo];
+// "After Promise" prints before "Item is in stock!"
+// because the Promise executor runs immediately, while .then() runs asynchronously.
 
-  return newArr;
-};
+console.log("After Promise");
+ 
 
-console.log(swap(1, 2));
-console.log(swap("Hello", "welcome"));
+// 2 - Tracing Execution Order
+
+const checkDelivery = new Promise<string>((resolve, reject) => {
+  console.log("Checking delivery...");
+
+  const delivered: boolean = true;
+
+  if (delivered) {
+    resolve("Item has been delivered!");
+  } else {
+    reject("Item has not been delivered!");
+  }
+})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((err) => {
+    console.log("Error:", err);
+  });
+console.log("#".repeat(100));
+
+
+console.log("After checkDelivery");
+
+// 3 - Forcing a Rejection
+
+const paymentCheck = new Promise<string>((resolve, reject) => {
+  console.log("Checking payment...");
+
+  const paymentSuccessful: boolean = false;
+
+  if (paymentSuccessful) {
+    resolve("Payment was successful!");
+  } else {
+    reject("Payment failed.");
+  }
+})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+
+    console.log(
+      "Sorry, your payment could not be completed. Please try again.",
+    );
+  });

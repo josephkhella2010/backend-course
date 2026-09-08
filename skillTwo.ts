@@ -1,63 +1,77 @@
-// Skill 2: Interfaces & Type Aliases (& means AND)
+//Skill 2: Asynchronous Callbacks
 
-// A- Book Interface
+type CallBackType = () => void;
 
-interface BookType {
-  title: string;
-  pages: number;
-}
-
-const book: BookType = {
-  title: "Harry Botter",
-  pages: 350,
+const countDown = (seconds: number, callBack: CallBackType): void => {
+  setTimeout(() => {
+    //console.log("Time's up!");
+    callBack();
+  }, seconds * 1000);
 };
 
-const describeBook = (book: BookType): string => {
-  return `The book ${book.title} has ${book.pages} pages`;
+console.log("before countDown");
+
+countDown(3, () => {
+  console.log("Countdown finished.");
+});
+
+console.log("after countDown");
+/*   Order:
+   1. before countDown
+   2. after countDown
+   3. Time's up!
+   4. Countdown finished.
+   The first two logs happen immediately, while setTimeout waits 3 seconds. */
+
+//Skill 2: Delayed Greeting
+type CallBackFunType = () => void;
+
+const delayedGreeting = (
+  name: string,
+  delay: number,
+  callback: CallBackFunType,
+) => {
+  setTimeout(() => {
+     console.log(`Hi ${name}, thanks for waiting!"`);
+    callback();
+  }, delay * 1000);
 };
 
-console.log(describeBook(book));
+delayedGreeting("Marco", 2, () => {
+  setTimeout(() => {
+    console.log("Callback executed!");
+  }, 1500);
+});
 
-// B- Combining Interfaces
+//Skill 3: Challenge (optional): Two Timers, One Order
 
-interface TeacherType {
-  name: string;
-  subject: string;
-}
-interface EmployeeType {
-  id: number;
-  email: string;
-}
+type CallBackFunTypeTwo = () => void;
 
-type SchoolTeacher = TeacherType & EmployeeType;
-
-const printTeacherInfo = (info: SchoolTeacher): string => {
-  return `teacher name: ${info.name} - subject:- ${info.subject} - employee id: ${info.id} - employee email: ${info.email} `;
+const delayedMessageTwo = (
+  message: string,
+  delay: number,
+  callback: CallBackFunTypeTwo,
+): void => {
+  setTimeout(() => {
+    console.log(message);
+    callback();
+  }, delay);
 };
 
-console.log(
-  printTeacherInfo({
-    name: "Rechard",
-    subject: "Science",
-    id: 1,
-    email: "rechard@gmail.com",
-  }),
-);
 
-// c- Challenge (optional) Favorite Car
 
-interface CarType {
-  brand: string;
-  year: number;
-}
+delayedMessageTwo("Message after 3000ms", 3000, () => {
+  console.log("Callback for 3000ms");
+});
 
-const printCar = (favoraitCar: CarType): string => {
-  return `Brand:${favoraitCar.brand} ,  Year:${favoraitCar.year}`;
-};
+delayedMessageTwo("Message after 1000ms", 1000, () => {
+  console.log("Callback for 1000ms");
+});
 
-console.log(
-  printCar({
-    brand: "Tyoyta",
-    year: 2022,
-  }),
-);
+// Prediction:
+// "Message after 1000ms" will print first.
+
+// Actual result:
+// "Message after 1000ms" prints first.
+// "Message after 3000ms" prints second.
+// The 1000ms timer finishes before the 3000ms timer, even though the 3000ms call was written first.
