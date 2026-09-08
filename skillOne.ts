@@ -1,40 +1,86 @@
-//Skill 1: Union Types (| means OR)
+console.log("week 4");
+/// 1- Order Confirmation
 
-//A-ID Card
-
-type IDType = string | number;
-
-const showID = (id: IDType): string => {
-  return `Your ID is: ${id}`;
-};
-console.log(showID(12345));
-console.log(showID("AB123"));
-
-//B- Fruit Basket
-
-type Fruit = "apple" | "banana" | "orange";
-
-const eatFruit = (fruit: Fruit): string => {
-  return `You ate ${
-    fruit.charAt(0).toLowerCase() === "a" ||
-    fruit.charAt(0).toLowerCase() === "o" ||
-    fruit.charAt(0).toLowerCase() === "y" ||
-    fruit.charAt(0).toLowerCase() === "i" ||
-    fruit.charAt(0).toLowerCase() === "e"
-      ? "an"
-      : "a"
-  } ${fruit}`;
-};
-console.log(eatFruit("apple"));
-console.log(eatFruit("orange"));
-console.log(eatFruit("banana"));
-
-// c- Challenge (optional) Pass or Fail
-type Result = true | false;
-
-const printResult = (result: Result): string => {
-  return result ? "Pass" : "Fail";
+type placeOrderType = {
+  item: string;
+  callback: () => void;
 };
 
-console.log(printResult(true));
-console.log(printResult(false));
+const placeOrder = ({ item, callback }: placeOrderType): void => {
+  console.log(`Order placed for ${item}`);
+  callback();
+};
+
+placeOrder({
+  item: "Pizza",
+  callback: () => {
+    console.log("Thanks for your order!");
+  },
+});
+const orderCallback = (): void => {
+  console.log("Thanks for your order!");
+};
+
+placeOrder({
+  item: "Pizza",
+  callback: orderCallback,
+});
+
+//2- Sum with a Named Type
+
+type SumCallBackType = {
+  a: number;
+  b: number;
+  SumCallback: (result: number) => void;
+};
+const sumNumbers = ({ a, b, SumCallback }: SumCallBackType): void => {
+  const result = a + b;
+  SumCallback(result);
+};
+
+const SumCallback = (result: number): void => {
+  console.log(`the result is ${result}`);
+};
+
+sumNumbers({
+  a: 10,
+  b: 2,
+  SumCallback: SumCallback,
+});
+
+//3- Challenge (optional): Callback with Multiple Parameters
+
+type CompareCallbackType = (a: number, b: number) => string;
+
+const compareNumbers = (
+  a: number,
+  b: number,
+  callback: CompareCallbackType,
+): string => {
+  return callback(a, b);
+};
+const callback = (a: number, b: number): string => {
+  let result;
+
+  switch (true) {
+    case a > b:
+      result = "A is bigger";
+      break;
+
+    case b > a:
+      result = "B is bigger";
+      break;
+
+    case a === b:
+      result = "equal";
+      break;
+
+    default:
+      result = "unknown";
+  }
+  return ` The Result is ${result}`;
+};
+
+console.log(compareNumbers(10, 15, callback));
+console.log(compareNumbers(15, 10, callback));
+console.log(compareNumbers(10, 10, callback));

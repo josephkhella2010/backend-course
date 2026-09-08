@@ -1,69 +1,54 @@
-//Skill 3: Enums (fixed list of options)
+//Skill 3: Callbacks That Return Values
 
-//A- Color Picker
-
-enum Color {
-  Red,
-  Green,
-  Blue,
-}
-
-const showColor = (color: Color): string => {
-  if (color === Color.Red) {
-    return `Red`;
-  } else if (color === Color.Green) {
-    return `Green.`;
-  } else {
-    return `Blue.`;
-  }
+// A-Temperature Converter
+type ConvertCallback = (celsius: number) => number;
+const convertTemperature = (
+  celsius: number,
+  convertCallBack: ConvertCallback,
+): number => {
+  return convertCallBack(celsius);
 };
 
-console.log(showColor(Color.Red));
-console.log(showColor(Color.Green));
-console.log(showColor(Color.Blue));
+convertTemperature(50, (cel: number) => {
+  const resultF = (cel * 9) / 5 + 32;
+  console.log(`Fahrenheit: ${resultF}`);
+  return resultF;
+});
 
-//B- Pizza Order
-enum PizzaSizeType {
-  Small,
-  Medium,
-  Large,
-}
+convertTemperature(50, (cel: number) => {
+  const resultC = ((cel - 32) * 5) / 9;
+  console.log(`Celsius: ${resultC}`);
+  return resultC;
+});
 
-const orderPizza = (pizzaSize: PizzaSizeType): string => {
-  if (pizzaSize === PizzaSizeType.Large) {
-    return `You ordered a Large pizza.`;
-  } else if (pizzaSize === PizzaSizeType.Medium) {
-    return `You ordered a Medium pizza.`;
-  } else {
-    return `You ordered a Small pizza.`;
-  }
+// 2- Array Processor with a Return Value
+type ReduceCallback = (acc: number, curr: number) => number;
+
+const processNumbers = (arr: number[], callbackTwo: ReduceCallback): number => {
+  return arr.reduce(callbackTwo);
 };
 
-console.log(orderPizza(PizzaSizeType.Large));
-console.log(orderPizza(PizzaSizeType.Medium));
-console.log(orderPizza(PizzaSizeType.Small));
-
-//c- Challenge (optional) Role-Based Access
-
-enum RoleType {
-  Admin,
-  User,
-  Guest,
-}
-
-const printRole = (role: RoleType): string => {
-  switch (role) {
-    case RoleType.Admin:
-      return "You have full access";
-
-    case RoleType.User:
-      return "You have limited access";
-
-    case RoleType.Guest:
-      return "You have guest access";
-  }
+const callbackTwo: ReduceCallback = (acc, curr): number => {
+  return acc + curr;
 };
 
-console.log(printRole(RoleType.Admin));
-console.log(printRole(RoleType.User));
-console.log(printRole(RoleType.Guest));
+console.log(processNumbers([1, 2, 3, 4, 5, 6], callbackTwo));
+
+// 3- Challenge: Naming Collision
+
+type Volume = (side: number) => number;
+
+const Volume = (side: number): number => {
+  return side ** 3;
+};
+
+const applyToCube = (callback: Volume): number => {
+  const side = 3;
+  return callback(side);
+};
+
+console.log(applyToCube(Volume));
+
+// This compiles because TypeScript keeps types and values in separate namespaces.
+// "Volume" is a type when used as a type, and "Volume" is a function when used as a value.
+// However, using the same name for both can be confusing, so it is better to use different names in real code.
