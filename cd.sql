@@ -1,23 +1,24 @@
-
-
-
 -- 1. Retrieve everything from a table
+
 SELECT *
 FROM public.facilities;
 
 
 -- 2. Retrieve specific columns from a table
+
 SELECT name, membercost
 FROM public.facilities;
 
 
 -- 3. Control which rows are retrieved
+
 SELECT *
 FROM public.facilities
 WHERE membercost > 0;
 
 
 -- 4. Control which rows are retrieved – part 2
+
 SELECT *
 FROM public.facilities
 WHERE membercost > 0
@@ -25,39 +26,47 @@ WHERE membercost > 0
 
 
 -- 5. Basic string searches
+
 SELECT *
 FROM public.facilities
-WHERE name LIKE '%Tennis%';
+WHERE name LIKE '%Swimming Pool%';
 
 
 -- 6. Matching against multiple possible values
+
 SELECT *
 FROM public.facilities
-WHERE facid IN (1, 5);
+WHERE facid IN (1, 3);
 
 
 -- 7. Classify results into buckets
+
 SELECT name,
        CASE
-           WHEN membercost = 0 THEN 'free'
-           ELSE 'paid'
+           WHEN membercost > 0
+                AND membercost <= 3
+           THEN 'cheap'
+           ELSE 'expensive'
        END AS cost
 FROM public.facilities;
 
 
 -- 8. Working with dates
+
 SELECT memid, firstname, surname, joindate
 FROM public.members
-WHERE joindate >= '2012-09-01';
+WHERE joindate >= '2026-03-20';
 
 
 -- 9. Removing duplicates, and ordering results
-SELECT DISTINCT surname
+
+SELECT DISTINCT surname, firstname
 FROM public.members
-ORDER BY surname;
+ORDER BY surname, firstname;
 
 
 -- 10. Combining results from multiple queries
+
 SELECT firstname AS name
 FROM public.members
 
@@ -68,12 +77,15 @@ FROM public.facilities;
 
 
 -- 11. Simple aggregation
+
 SELECT COUNT(*)
-FROM public.members;
+FROM public.facilities
+WHERE membercost > 0;
 
 
 -- 12. More aggregation
-SELECT COUNT(*), MAX(joindate)
+
+SELECT MAX(recommendedby)
 FROM public.members;
 
 -- tables 
