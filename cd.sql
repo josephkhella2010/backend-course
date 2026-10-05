@@ -39,7 +39,7 @@ FROM public.facilities
 WHERE facid IN (1, 3);
 
 
--- 7. Classify results into buckets
+-- 7.Classify results into buckets
 
 SELECT name,
        CASE
