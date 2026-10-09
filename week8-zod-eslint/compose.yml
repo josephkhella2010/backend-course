@@ -1,6 +1,6 @@
 services:
   db:
-    container_name: progress_books_db
+    container_name: week8_zod_postgres
     image: postgres:16
     restart: always
     environment:
@@ -13,7 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   pgAdmin:
-    container_name: pgadmin_books_container
+    container_name: week8_zod_pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:
@@ -28,7 +28,6 @@ services:
 
 volumes:
   postgres_data:
-    name: progress_books_data
-
+    name: week8_zod_postgres_data
   pgadmin_data:
-    name: progress_books_pgadmin_data
+    name: week8_zod_pgadmin_data
