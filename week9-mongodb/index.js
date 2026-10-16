@@ -275,6 +275,6 @@ app.get("/", (req, res) => {
   res.send("Library API is running!");
 });
 
-app.listen(process.env.PORT || 3005, () => {
+app.listen(process.env.PORT || 3006, () => {
   console.log("Server running on port localhost:3005");
 });
