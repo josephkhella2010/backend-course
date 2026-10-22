@@ -14,6 +14,8 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3004;
 
+// books Routes
+
 // GET all books with their authors
 app.get("/books", async (req, res) => {
   try {
@@ -28,10 +30,12 @@ app.get("/books", async (req, res) => {
   }
 });
 
-// GET one book by ID
+// GET one book by ID with Author
 app.get("/books/:id", async (req, res) => {
   try {
-    const book = await Book.findByPk(req.params.id);
+    const book = await Book.findByPk(req.params.id, {
+      include: Author,
+    });
 
     if (!book) {
       return res.status(404).json({ error: "Book not found" });
@@ -91,6 +95,7 @@ app.put("/books/:id", async (req, res) => {
     });
   }
 });
+
 // DELETE a book by ID
 app.delete("/books/:id", async (req, res) => {
   try {
@@ -108,7 +113,23 @@ app.delete("/books/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete book" });
   }
 });
+
+// authours Routes
+
+// GET all authors
+
+app.get("/authors", async (req, res) => {
+  try {
+    const authors = await Author.findAll();
+    res.status(200).json(authors);
+  } catch (error) {
+    console.error("Error fetching authors:", error);
+    res.status(500).json({ error: "Failed to fetch authors" });
+  }
+});
+
 // POST - Create an author
+
 app.post("/authors", async (req, res) => {
   try {
     const { name } = req.body;
@@ -141,6 +162,8 @@ app.get("/authors/:id/books", async (req, res) => {
   }
 });
 
+// Loan Route
+
 // create loan book
 
 app.post("/loans", async (req, res) => {
@@ -157,6 +180,8 @@ app.post("/loans", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Member Routes
 
 //create member
 
@@ -193,7 +218,7 @@ app.get("/members/:id/loans", async (req, res) => {
   }
 });
 
-///////////////////////
+//
 
 // Start server after connecting to the database
 async function startServer() {
@@ -209,4 +234,3 @@ async function startServer() {
 }
 
 startServer();
-
