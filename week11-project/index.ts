@@ -94,16 +94,14 @@ app.get("/items/:id", async (req, res) => {
   try {
     const id = z.number().int().positive().parse(Number(req.params.id));
     const item = await Item.findByPk(id);
-       if (!item) {
+    if (!item) {
       return res.status(404).json({
         message: "Item not found",
       });
-    } 
-          res.status(200).json(item);
+    }
+    res.status(200).json(item);
 
-    
-    
-   /*  res.status(200).json({
+    /*  res.status(200).json({
       name: (item.get("name") as string).toUpperCase(),
     }); */
   } catch (error) {
@@ -132,7 +130,8 @@ app.put("/items/:id", async (req, res) => {
 
   //Sentry.setTag("feature", "items");
   try {
-    const item = await Item.findByPk(req.params.id);
+    const id = z.number().int().positive().parse(Number(req.params.id));
+    const item = await Item.findByPk(id);
     const validatedData = itemSchema.parse(req.body);
     if (!item) {
       return res.status(404).json({
@@ -170,7 +169,8 @@ app.delete("/items/:id", async (req, res) => {
 
   //Sentry.setTag("feature", "items");
   try {
-    const item = await Item.findByPk(req.params.id);
+    const id = z.number().int().positive().parse(Number(req.params.id));
+    const item = await Item.findByPk(id);
 
     if (!item) {
       return res.status(404).json({
