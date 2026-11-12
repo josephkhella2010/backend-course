@@ -1,0 +1,264 @@
+### Exercise 1: SonarQube in Docker
+
+## 1: What does `docker ps` show you? Which columns tell you that SonarQube is running, and on which port?
+
+The `docker ps` command shows all currently running Docker containers. The **STATUS** column shows that the SonarQube container is running. The **PORTS** column shows that port 9000 on my computer is mapped to port 9000 inside the container.
+
+### Question: Why run SonarQube in Docker instead of installing it directly on your computer?
+
+Running SonarQube in Docker makes installation and setup easier because everything runs inside a container. It avoids installing and configuring all dependencies directly on the computer. It also keeps the environment isolated, makes it easier to start and stop SonarQube, and allows the same setup to be used on different computers.
+
+### Exercise 2: Your first scan
+
+### 1: Did your project pass or fail the quality gate? How many issues did SonarQube find?
+
+My project is named `week11-sonarqube`. I ran the SonarQube analysis successfully using the JavaScript/TypeScript scanner.
+
+SonarQube reported 1 open issue. The Security rating was B, while the Reliability and Maintainability ratings were A.
+
+The Quality Gate status is: [Passed/Failed — check the Overview page].
+
+# Exercise 3: Read before you fix
+
+Issue 1: Web application technologies should not disclose version information
+
+Rule name: typescript:S5689 – Web application technologies should not disclose version information.
+
+File: server.ts
+
+Line: 4 – const app = express();
+
+What is wrong?
+
+The Express application can disclose information about the technology it uses through the X-Powered-By HTTP response header. This header can reveal that the application uses Express. Giving away technology information can help attackers identify the framework and search for known vulnerabilities that might affect it.
+
+What would compliant code look like?
+
+const app = express();
+app.disable("x-powered-by");
+
+This disables the X-Powered-By header so that Express does not reveal this information in its responses.
+
+Do I agree that this is a problem? Why?
+
+Yes, I agree. An application should not reveal unnecessary technical information to users or potential attackers. Disabling this header is a simple security improvement. It does not prevent every attack, but it reduces information disclosure.
+
+Issue 2: Array sorting should use a compare function
+
+Rule name: "Array.prototype.sort()" and "Array.prototype.toSorted()" should use a compare function
+
+File: server.ts
+
+Line: The line containing numbers.sort() in the /numbers/sorted route.
+
+What is wrong?
+
+JavaScript's sort() method sorts values as strings by default when no compare function is provided. This can produce an incorrect result when sorting numbers. For example, the number 100 can be placed before 30 because JavaScript compares their text representations rather than their numerical values.
+
+What would compliant code look like?
+
+const numbers = [30, 5, 100, 2];
+const sortedNumbers = numbers.sort((a, b) => a - b);
+
+The compare function (a, b) => a - b tells JavaScript to sort the numbers in ascending numerical order.
+
+Do I agree that this is a problem? Why?
+
+Yes, I agree. Without a compare function, the result may not be in the numerical order that a developer expects. Using a compare function makes the intended behavior clear and prevents incorrect sorting.
+
+Issue 3: Array.reduce() calls should include an initial value
+
+Rule name: "Array.reduce()" calls should include an initial value
+
+File: server.ts
+
+Line: The line containing numbers.reduce() in the /numbers/total route.
+
+What is wrong?
+
+The reduce() method combines array elements into one result. If no initial value is provided, JavaScript uses the first array element as the starting value. This can cause an error if the array is empty and can make the calculation less predictable. Providing an initial value makes the starting point clear.
+
+What would compliant code look like?
+
+const numbers = [10, 20, 30];
+const total = numbers.reduce(
+(sum, number) => sum + number,
+0
+);
+
+The value 0 is the initial value. The calculation starts at zero and adds each number to the total.
+
+Do I agree that this is a problem? Why?
+
+Yes, I agree. Providing an initial value makes the code safer, especially when the array might be empty. It also makes the intention of the calculation easier to understand.
+
+Question 4 – Security, Reliability, and Maintainability
+
+My SonarQube version groups issues by the quality they affect: Security, Reliability, and Maintainability.
+
+1. Security
+
+Security issues are problems that could make an application vulnerable to attacks or expose sensitive information.
+
+Example from my project: Express can reveal information about the framework through the X-Powered-By response header. I fixed this by adding:
+
+app.disable("x-powered-by");
+
+2. Reliability
+
+Reliability issues are problems that could cause bugs, incorrect results, or unexpected application behavior.
+
+Example from my project: Using JavaScript's sort() without a compare function can sort numbers incorrectly. I fixed this by using:
+
+numbers.sort((a, b) => a - b);
+
+3. Maintainability
+
+Maintainability issues make code harder to read, understand, change, or maintain in the future.
+
+Example: Duplicated code makes a project harder to update because the same change may need to be made in several places. Creating reusable functions reduces duplication and makes the code easier to maintain.
+
+Question 5 – SonarQube vs. Automated Tests vs. Sentry
+
+SonarQube, automated tests, and Sentry all help developers find problems, but they find different kinds of problems.
+
+1. SonarQube
+
+SonarQube analyzes the source code and finds potential bugs, security weaknesses, and maintainability problems. It can detect suspicious code patterns without running the application.
+
+What it finds that the others might not: Code-quality problems and certain security or reliability issues that are visible by inspecting the source code, even if no test currently exercises that code.
+
+2. Automated Tests
+
+Automated tests run parts of the application and check whether they behave as expected. They can find functional errors, such as an API returning the wrong result or a calculation producing an incorrect answer.
+
+What they find that the others might not: Whether specific application features actually work correctly for the test inputs and expected results. SonarQube cannot prove that the application produces the correct output, and Sentry only reports errors that occur while the application is running and monitored.
+
+3. Sentry
+
+Sentry monitors an application while it is running. It collects real errors and exceptions, especially those that happen in production, and provides information that helps developers investigate them.
+
+What it finds that the others might not: Errors that happen in real user environments, such as unexpected input, production configuration problems, or failures that were not covered by automated tests.
+
+Conclusion
+
+SonarQube checks the quality and structure of the source code, automated tests check whether the application behaves correctly, and Sentry monitors the running application and helps developers investigate real errors. They complement each other because no single tool can find every type of problem.
+
+## Exercise 4 – Keeping Secrets Out of Your Code
+
+### Question 1: Your `package.json` goes to GitHub. What could someone do with your SonarQube token if they found it there? What about a database password or a Sentry DSN?
+
+If someone found my SonarQube token on GitHub, they could potentially use it to access my SonarQube project with the permissions assigned to that token. Depending on its permissions, they might be able to submit code analyses or access project information.
+
+If someone found my database password, they could potentially connect to my database, read sensitive information, modify data, or delete data. This could be a serious security risk.
+
+A Sentry DSN is different because it is usually designed to be included in application code. It allows an application to send error reports to a Sentry project. If someone obtained it, they could potentially send fake events or spam the project with unwanted reports. A DSN is not the same as a Sentry authentication token, and it does not normally give access to manage the Sentry account.
+
+This is why private credentials, such as database passwords and SonarQube tokens, should be stored in environment variables and not committed to GitHub.
+
+### Question 2: Why is it better to put settings like the project key in `sonar-project.properties` instead of a long command?
+
+It is better to put settings such as the SonarQube project key, project name, and source folder in `sonar-project.properties` because it keeps the scanner command short and easy to understand.
+
+It also makes the configuration easier to maintain. If a setting changes, I only need to update the properties file instead of remembering to change a long command every time I run the scanner.
+
+The properties file can be committed to GitHub because it contains normal project configuration, not private credentials. Secret values such as the SonarQube token should stay in `.env`.
+
+**Conclusion:** Separating project configuration from private credentials makes the project easier to maintain, safer, and easier for other developers to set
+
+# Exercise 5: Scan only your own code
+
+### 1. Which folders and files were scanned?
+
+SonarQube showed the server.ts file with 31 lines of code and the tests folder separately. The tests were identified as test files.
+
+### 2. What exclusions did you add?
+
+I added .scannerwork/** to the exclusions. The existing exclusions already covered node_modules/**, coverage/** and dist/**.
+
+### 3. What changed in the numbers and why?
+
+The numbers did not change. The project still has 31 lines of code and zero open issues. This is because the excluded folders were not contributing to the reported source code in the first place.
+
+### 4. Why is it a problem when SonarQube reports issues in code you didn't write?
+
+It can create false alarms and unnecessary work. Developers may waste time fixing problems in downloaded or generated code instead of focusing on their own code. It can also make the analysis results less useful and harder to understand.
+
+# Exercise 6: Fix, test, repeat
+
+| Rule                                                       | File               | What I changed                                                                  | Tests still green? |
+| ---------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------- | ------------------ |
+| Prefer top-level await over promise chain / handle Promise | server.ts          | Moved database connection into its own file and used async/await with try/catch | Yes                |
+| Express application information disclosure                 | server.ts / app.ts | Disabled the x-powered-by header                                                | Yes                |
+| Sorting without a numeric comparator                       | server.ts / app.ts | Added a numeric sorting comparator                                              | Yes                |
+| Reduce without initial value                               | server.ts / app.ts | Added an initial value to reduce()                                              | Yes                |
+
+## Question 1: Why run your tests after every fix, even when the change looks small?
+
+Running tests after every fix helps ensure that the change has not introduced new bugs or broken existing functionality. It also makes it easier to identify which change caused a problem.
+
+## Question 2: Choose one of your fixes. Is the code easier to read now? Explain why or why not.
+
+Yes. The database connection code is easier to read because async/await with try/catch makes the execution flow clearer. It is easier to understand when the database connection succeeds and how errors are handled.
+
+### Exercise 7: Test coverage in SonarQube
+
+### 1. Compare the coverage percentage in SonarQube with the table Vitest prints. Are they the same? If not, why might they differ?
+
+No, they are not necessarily the same. Vitest calculates coverage from the tests it runs, while SonarQube reads the LCOV report and calculates coverage based on its own analysis scope. Excluded files, new code, and condition coverage can make the percentages different.
+
+### 2. Why does the script use && between the two commands? What happens if a test fails?
+
+The && makes sure that the second command (SonarQube scan) runs only if the first command (tests and coverage) succeeds. If a test fails, the SonarQube scan will not run. This prevents submitting a coverage report when the tests have failed
+
+# Exercise 8: Make the quality gate fail, then pass
+
+### 1. Why does the Quality Gate focus on new code instead of all the code in the project?
+
+The Quality Gate focuses on new code because large, old projects may already have thousands of issues. Fixing all of them at once would take a lot of time. By focusing on new code, the team can improve quality gradually and avoid introducing new problems.
+
+### 2. In a team, what could you use a failing Quality Gate for?
+
+A failing Quality Gate can prevent code from being merged into the main branch until the problems are fixed. This helps the team make sure new code meets quality standards before it becomes part of the project.
+
+# Exercise 9: Security review and your final report
+
+
+## Exercise 9 – Security review and final report
+
+### Security review
+No Security Hotspots were waiting for review in SonarQube. The project had no outstanding issues to mark as Accept or False Positive, because all five previously reported issues were fixed.
+
+### Quality report
+
+| Metric | First scan | Final scan |
+|---|---|---|
+| Quality Gate | Passed (first recorded analysis) | Passed |
+| Lines of code | Not recorded | 143 |
+| Issues | Not recorded | 0 |
+| Security hotspots to review | 0 | 0 |
+| Coverage | Not recorded | 98.7% |
+
+### Reflection
+
+**What changed the most, and what caused it?**
+
+The code quality improved during the exercises. I fixed reliability and security issues, added tests, and configured code coverage. This helped the project reach 98.7% coverage and pass the Quality Gate.
+
+### Which fix are you proudest of, and why?
+
+I am proudest of adding tests for the API routes. They cover successful requests, validation errors, missing items, and server errors. This makes the application more reliable.
+
+### What's left, and would you fix it next, or leave it? Why?
+
+There are no outstanding issues reported by SonarQube. I would continue adding tests and monitoring code quality as the project grows.
+
+### Final scan
+
+### Question: You marked an issue as Accept or False Positive. What could go wrong if a team does that too often?
+
+If a team accepts too many issues without investigating them properly, real bugs and security vulnerabilities might remain in the project. This can make the application less secure and less reliable.
+
+### Question: Over the last weeks you used tests, Zod, Sentry and SonarQube. If you could only keep two of them on a real project, which would you choose, and why?
+
+I would keep tests and SonarQube. Tests help detect bugs and make sure the application works correctly. SonarQube helps identify code quality and security problems. Together, they help prevent problems before the application is released.

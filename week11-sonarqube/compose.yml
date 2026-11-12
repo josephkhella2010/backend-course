@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: week11-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5440:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: week11-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5055:80"
+    depends_on:
+      - postgres
+
+  sonarqube:
+    image: sonarqube
+    container_name: my-sonarqube
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+
+volumes:
+  postgres_data:
+    external: true
+    name: week11-project_postgres_data
+
+  sonarqube_data:
