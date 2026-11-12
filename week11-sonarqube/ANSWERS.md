@@ -16,92 +16,126 @@ The Quality Gate status is: [Passed/Failed — check the Overview page].
 
 # Exercise 3: Read before you fix
 
-## Issue 1
+Issue 1: Web application technologies should not disclose version information
 
-- **Rule name:** Framework implicitly discloses version information by default.
-- **File:** `server.ts`
-- **Line:** 4
-- **Category:** Security
+Rule name: typescript:S5689 – Web application technologies should not disclose version information.
 
-**What is wrong?**
+File: server.ts
 
-Express can disclose information about the framework through the HTTP response header `X-Powered-By`. This can help attackers identify which technology is used by the application.
+Line: 4 – const app = express();
 
-**What would compliant code look like?**
+What is wrong?
 
-```ts
+The Express application can disclose information about the technology it uses through the X-Powered-By HTTP response header. This header can reveal that the application uses Express. Giving away technology information can help attackers identify the framework and search for known vulnerabilities that might affect it.
+
+What would compliant code look like?
+
 const app = express();
 app.disable("x-powered-by");
-```
 
-**Do I agree? Why?**
+This disables the X-Powered-By header so that Express does not reveal this information in its responses.
 
-Yes, I agree. Hiding framework information makes it harder for attackers to identify the technology used by the application. It is a simple security improvement.
+Do I agree that this is a problem? Why?
 
-## Issue 2
+Yes, I agree. An application should not reveal unnecessary technical information to users or potential attackers. Disabling this header is a simple security improvement. It does not prevent every attack, but it reduces information disclosure.
 
-- **Rule name:** To be completed from SonarQube.
-- **File and line:** To be completed from SonarQube.
+Issue 2: Array sorting should use a compare function
 
-**What is wrong?**
+Rule name: "Array.prototype.sort()" and "Array.prototype.toSorted()" should use a compare function
 
-To be completed using the "Why is this an issue?" explanation in SonarQube.
+File: server.ts
 
-**What would compliant code look like?**
+Line: The line containing numbers.sort() in the /numbers/sorted route.
 
-To be completed using the rule's recommended solution.
+What is wrong?
 
-**Do I agree? Why?**
+JavaScript's sort() method sorts values as strings by default when no compare function is provided. This can produce an incorrect result when sorting numbers. For example, the number 100 can be placed before 30 because JavaScript compares their text representations rather than their numerical values.
 
-To be completed after reviewing the issue.
+What would compliant code look like?
 
-## Issue 3
+const numbers = [30, 5, 100, 2];
+const sortedNumbers = numbers.sort((a, b) => a - b);
 
-- **Rule name:** To be completed from SonarQube.
-- **File and line:** To be completed from SonarQube.
+The compare function (a, b) => a - b tells JavaScript to sort the numbers in ascending numerical order.
 
-**What is wrong?**
+Do I agree that this is a problem? Why?
 
-To be completed using the "Why is this an issue?" explanation in SonarQube.
+Yes, I agree. Without a compare function, the result may not be in the numerical order that a developer expects. Using a compare function makes the intended behavior clear and prevents incorrect sorting.
 
-**What would compliant code look like?**
+Issue 3: Array.reduce() calls should include an initial value
 
-To be completed using the rule's recommended solution.
+Rule name: "Array.reduce()" calls should include an initial value
 
-**Do I agree? Why?**
+File: server.ts
 
-To be completed after reviewing the issue.
+Line: The line containing numbers.reduce() in the /numbers/total route.
 
----
+What is wrong?
 
-## Question 1: Explain the three groups your SonarQube uses, with an example.
+The reduce() method combines array elements into one result. If no initial value is provided, JavaScript uses the first array element as the starting value. This can cause an error if the array is empty and can make the calculation less predictable. Providing an initial value makes the starting point clear.
 
-**Security**
+What would compliant code look like?
 
-Security issues are problems that could make an application vulnerable to attacks or expose information. For example, Express revealing framework information through the `X-Powered-By` response header.
+const numbers = [10, 20, 30];
+const total = numbers.reduce(
+  (sum, number) => sum + number,
+  0
+);
 
-**Reliability**
+The value 0 is the initial value. The calculation starts at zero and adds each number to the total.
 
-Reliability issues are bugs that can cause an application to behave incorrectly or crash. For example, accessing a property of an undefined variable can cause a runtime error.
+Do I agree that this is a problem? Why?
 
-**Maintainability**
+Yes, I agree. Providing an initial value makes the code safer, especially when the array might be empty. It also makes the intention of the calculation easier to understand.
 
-Maintainability issues make code harder to understand, change or maintain. For example, duplicated code or unnecessarily complicated functions.
+Question 4 – Security, Reliability, and Maintainability
 
-## Question 2: What does SonarQube, your tests and Sentry each find?
+My SonarQube version groups issues by the quality they affect: Security, Reliability, and Maintainability.
 
-**SonarQube**
+1. Security
 
-SonarQube analyzes source code and identifies potential bugs, security vulnerabilities and maintainability problems. It can find problems without running the application.
+Security issues are problems that could make an application vulnerable to attacks or expose sensitive information.
 
-**Tests**
+Example from my project: Express can reveal information about the framework through the X-Powered-By response header. I fixed this by adding:
 
-Tests check whether the application behaves as expected. They can find functional problems, such as an API endpoint returning an incorrect result.
+app.disable("x-powered-by");
 
-**Sentry**
+2. Reliability
 
-Sentry monitors the application while it is running. It helps find real errors and exceptions and provides information that helps developers investigate them.
+Reliability issues are problems that could cause bugs, incorrect results, or unexpected application behavior.
 
-**Conclusion**
+Example from my project: Using JavaScript's sort() without a compare function can sort numbers incorrectly. I fixed this by using:
 
-SonarQube checks code quality, tests verify application functionality, and Sentry monitors errors in a running application. Together, they help developers build more secure and reliable software.
+numbers.sort((a, b) => a - b);
+
+3. Maintainability
+
+Maintainability issues make code harder to read, understand, change, or maintain in the future.
+
+Example: Duplicated code makes a project harder to update because the same change may need to be made in several places. Creating reusable functions reduces duplication and makes the code easier to maintain.
+
+Question 5 – SonarQube vs. Automated Tests vs. Sentry
+
+SonarQube, automated tests, and Sentry all help developers find problems, but they find different kinds of problems.
+
+1. SonarQube
+
+SonarQube analyzes the source code and finds potential bugs, security weaknesses, and maintainability problems. It can detect suspicious code patterns without running the application.
+
+What it finds that the others might not: Code-quality problems and certain security or reliability issues that are visible by inspecting the source code, even if no test currently exercises that code.
+
+2. Automated Tests
+
+Automated tests run parts of the application and check whether they behave as expected. They can find functional errors, such as an API returning the wrong result or a calculation producing an incorrect answer.
+
+What they find that the others might not: Whether specific application features actually work correctly for the test inputs and expected results. SonarQube cannot prove that the application produces the correct output, and Sentry only reports errors that occur while the application is running and monitored.
+
+3. Sentry
+
+Sentry monitors an application while it is running. It collects real errors and exceptions, especially those that happen in production, and provides information that helps developers investigate them.
+
+What it finds that the others might not: Errors that happen in real user environments, such as unexpected input, production configuration problems, or failures that were not covered by automated tests.
+
+Conclusion
+
+SonarQube checks the quality and structure of the source code, automated tests check whether the application behaves correctly, and Sentry monitors the running application and helps developers investigate real errors. They complement each other because no single tool can find every type of problem.
