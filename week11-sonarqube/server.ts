@@ -1,12 +1,12 @@
+
 import "dotenv/config";
 import express from "express";
 
 const app = express();
-
-// Fix 1: Disable Express version disclosure
-app.disable("x-powered-by");
-
 const PORT = process.env.PORT || 3006;
+
+// Fix issue 1: Do not disclose Express version information
+app.disable("x-powered-by");
 
 app.use(express.json());
 
@@ -21,22 +21,23 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Example 2: Use loose equality instead of strict equality
-app.get("/example-equality", (req, res) => {
-  const userRole = "admin";
+// Fix issue 2: Use a compare function for numeric sorting
+app.get("/numbers/sorted", (req, res) => {
+  const numbers = [30, 5, 100, 2];
+  const sortedNumbers = numbers.sort((a, b) => a - b);
 
-  if (userRole == "admin") {
-    res.send("Administrator");
-  } else {
-    res.send("Regular user");
-  }
+  res.json(sortedNumbers);
 });
 
-// Example 3: Hardcoded password
-app.get("/example-password", (req, res) => {
-  const password = "admin123";
+// Fix issue 3: Include an initial value in reduce()
+app.get("/numbers/total", (req, res) => {
+  const numbers = [10, 20, 30];
+  const total = numbers.reduce(
+    (sum, number) => sum + number,
+    0
+  );
 
-  res.json({ message: "Example endpoint created" });
+  res.json({ total });
 });
 
 app.listen(PORT, () => {
