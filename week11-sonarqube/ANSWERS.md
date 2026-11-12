@@ -1,12 +1,12 @@
 ### Exercise 1: SonarQube in Docker
 
-## 1: What does `docker ps` show you? Which columns tell you that SonarQube is running, and on which port?**
+## 1: What does `docker ps` show you? Which columns tell you that SonarQube is running, and on which port?\*\*
 
 The `docker ps` command shows all currently running Docker containers. The **STATUS** column shows that the SonarQube container is running. The **PORTS** column shows that port 9000 on my computer is mapped to port 9000 inside the container.
 
 ### Exercise 2: Your first scan
 
-### 1: Did your project pass or fail the quality gate? How many issues did SonarQube find?**
+### 1: Did your project pass or fail the quality gate? How many issues did SonarQube find?\*\*
 
 My project is named `week11-sonarqube`. I ran the SonarQube analysis successfully using the JavaScript/TypeScript scanner.
 
@@ -78,8 +78,8 @@ What would compliant code look like?
 
 const numbers = [10, 20, 30];
 const total = numbers.reduce(
-  (sum, number) => sum + number,
-  0
+(sum, number) => sum + number,
+0
 );
 
 The value 0 is the initial value. The calculation starts at zero and adds each number to the total.
@@ -139,3 +139,43 @@ What it finds that the others might not: Errors that happen in real user environ
 Conclusion
 
 SonarQube checks the quality and structure of the source code, automated tests check whether the application behaves correctly, and Sentry monitors the running application and helps developers investigate real errors. They complement each other because no single tool can find every type of problem.
+
+## Exercise 4 – Keeping Secrets Out of Your Code
+
+### Question 1: Your `package.json` goes to GitHub. What could someone do with your SonarQube token if they found it there? What about a database password or a Sentry DSN?
+
+If someone found my SonarQube token on GitHub, they could potentially use it to access my SonarQube project with the permissions assigned to that token. Depending on its permissions, they might be able to submit code analyses or access project information.
+
+If someone found my database password, they could potentially connect to my database, read sensitive information, modify data, or delete data. This could be a serious security risk.
+
+A Sentry DSN is different because it is usually designed to be included in application code. It allows an application to send error reports to a Sentry project. If someone obtained it, they could potentially send fake events or spam the project with unwanted reports. A DSN is not the same as a Sentry authentication token, and it does not normally give access to manage the Sentry account.
+
+This is why private credentials, such as database passwords and SonarQube tokens, should be stored in environment variables and not committed to GitHub.
+
+### Question 2: Why is it better to put settings like the project key in `sonar-project.properties` instead of a long command?
+
+It is better to put settings such as the SonarQube project key, project name, and source folder in `sonar-project.properties` because it keeps the scanner command short and easy to understand.
+
+It also makes the configuration easier to maintain. If a setting changes, I only need to update the properties file instead of remembering to change a long command every time I run the scanner.
+
+The properties file can be committed to GitHub because it contains normal project configuration, not private credentials. Secret values such as the SonarQube token should stay in `.env`.
+
+**Conclusion:** Separating project configuration from private credentials makes the project easier to maintain, safer, and easier for other developers to set
+
+# Exercise 5: Scan only your own code
+
+### 1. Which folders and files were scanned?
+
+SonarQube showed the server.ts file with 31 lines of code and the tests folder separately. The tests were identified as test files.
+
+### 2. What exclusions did you add?
+
+I added .scannerwork/** to the exclusions. The existing exclusions already covered node_modules/**, coverage/** and dist/**.
+
+### 3. What changed in the numbers and why?
+
+The numbers did not change. The project still has 31 lines of code and zero open issues. This is because the excluded folders were not contributing to the reported source code in the first place.
+
+### 4. Why is it a problem when SonarQube reports issues in code you didn't write?
+
+It can create false alarms and unnecessary work. Developers may waste time fixing problems in downloaded or generated code instead of focusing on their own code. It can also make the analysis results less useful and harder to understand.
