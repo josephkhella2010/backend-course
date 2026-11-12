@@ -1,12 +1,16 @@
 ### Exercise 1: SonarQube in Docker
 
-## 1: What does `docker ps` show you? Which columns tell you that SonarQube is running, and on which port?\*\*
+## 1: What does `docker ps` show you? Which columns tell you that SonarQube is running, and on which port?
 
 The `docker ps` command shows all currently running Docker containers. The **STATUS** column shows that the SonarQube container is running. The **PORTS** column shows that port 9000 on my computer is mapped to port 9000 inside the container.
 
+### Question: Why run SonarQube in Docker instead of installing it directly on your computer?
+
+Running SonarQube in Docker makes installation and setup easier because everything runs inside a container. It avoids installing and configuring all dependencies directly on the computer. It also keeps the environment isolated, makes it easier to start and stop SonarQube, and allows the same setup to be used on different computers.
+
 ### Exercise 2: Your first scan
 
-### 1: Did your project pass or fail the quality gate? How many issues did SonarQube find?\*\*
+### 1: Did your project pass or fail the quality gate? How many issues did SonarQube find?
 
 My project is named `week11-sonarqube`. I ran the SonarQube analysis successfully using the JavaScript/TypeScript scanner.
 
@@ -179,3 +183,82 @@ The numbers did not change. The project still has 31 lines of code and zero open
 ### 4. Why is it a problem when SonarQube reports issues in code you didn't write?
 
 It can create false alarms and unnecessary work. Developers may waste time fixing problems in downloaded or generated code instead of focusing on their own code. It can also make the analysis results less useful and harder to understand.
+
+# Exercise 6: Fix, test, repeat
+
+| Rule                                                       | File               | What I changed                                                                  | Tests still green? |
+| ---------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------- | ------------------ |
+| Prefer top-level await over promise chain / handle Promise | server.ts          | Moved database connection into its own file and used async/await with try/catch | Yes                |
+| Express application information disclosure                 | server.ts / app.ts | Disabled the x-powered-by header                                                | Yes                |
+| Sorting without a numeric comparator                       | server.ts / app.ts | Added a numeric sorting comparator                                              | Yes                |
+| Reduce without initial value                               | server.ts / app.ts | Added an initial value to reduce()                                              | Yes                |
+
+## Question 1: Why run your tests after every fix, even when the change looks small?
+
+Running tests after every fix helps ensure that the change has not introduced new bugs or broken existing functionality. It also makes it easier to identify which change caused a problem.
+
+## Question 2: Choose one of your fixes. Is the code easier to read now? Explain why or why not.
+
+Yes. The database connection code is easier to read because async/await with try/catch makes the execution flow clearer. It is easier to understand when the database connection succeeds and how errors are handled.
+
+### Exercise 7: Test coverage in SonarQube
+
+### 1. Compare the coverage percentage in SonarQube with the table Vitest prints. Are they the same? If not, why might they differ?
+
+No, they are not necessarily the same. Vitest calculates coverage from the tests it runs, while SonarQube reads the LCOV report and calculates coverage based on its own analysis scope. Excluded files, new code, and condition coverage can make the percentages different.
+
+### 2. Why does the script use && between the two commands? What happens if a test fails?
+
+The && makes sure that the second command (SonarQube scan) runs only if the first command (tests and coverage) succeeds. If a test fails, the SonarQube scan will not run. This prevents submitting a coverage report when the tests have failed
+
+# Exercise 8: Make the quality gate fail, then pass
+
+### 1. Why does the Quality Gate focus on new code instead of all the code in the project?
+
+The Quality Gate focuses on new code because large, old projects may already have thousands of issues. Fixing all of them at once would take a lot of time. By focusing on new code, the team can improve quality gradually and avoid introducing new problems.
+
+### 2. In a team, what could you use a failing Quality Gate for?
+
+A failing Quality Gate can prevent code from being merged into the main branch until the problems are fixed. This helps the team make sure new code meets quality standards before it becomes part of the project.
+
+# Exercise 9: Security review and your final report
+
+
+## Exercise 9 – Security review and final report
+
+### Security review
+No Security Hotspots were waiting for review in SonarQube. The project had no outstanding issues to mark as Accept or False Positive, because all five previously reported issues were fixed.
+
+### Quality report
+
+| Metric | First scan | Final scan |
+|---|---|---|
+| Quality Gate | Passed (first recorded analysis) | Passed |
+| Lines of code | Not recorded | 143 |
+| Issues | Not recorded | 0 |
+| Security hotspots to review | 0 | 0 |
+| Coverage | Not recorded | 98.7% |
+
+### Reflection
+
+**What changed the most, and what caused it?**
+
+The code quality improved during the exercises. I fixed reliability and security issues, added tests, and configured code coverage. This helped the project reach 98.7% coverage and pass the Quality Gate.
+
+### Which fix are you proudest of, and why?
+
+I am proudest of adding tests for the API routes. They cover successful requests, validation errors, missing items, and server errors. This makes the application more reliable.
+
+### What's left, and would you fix it next, or leave it? Why?
+
+There are no outstanding issues reported by SonarQube. I would continue adding tests and monitoring code quality as the project grows.
+
+### Final scan
+
+### Question: You marked an issue as Accept or False Positive. What could go wrong if a team does that too often?
+
+If a team accepts too many issues without investigating them properly, real bugs and security vulnerabilities might remain in the project. This can make the application less secure and less reliable.
+
+### Question: Over the last weeks you used tests, Zod, Sentry and SonarQube. If you could only keep two of them on a real project, which would you choose, and why?
+
+I would keep tests and SonarQube. Tests help detect bugs and make sure the application works correctly. SonarQube helps identify code quality and security problems. Together, they help prevent problems before the application is released.
