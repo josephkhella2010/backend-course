@@ -4,7 +4,7 @@ import {
   getAvailableBooks,
   borrowBook,
   type Book,
-} from "../library.js";
+} from "../src/library.js";
 
 const books: Book[] = [
   {
