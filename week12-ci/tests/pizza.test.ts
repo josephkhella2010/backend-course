@@ -25,4 +25,10 @@ describe("Pizza functions", () => {
 
     expect(isValidPizza(pizza)).toBe(true);
   });
+
+  /*   it("rejects a pizza with an invalid price", () => {
+    const pizza = createPizza("Margherita", 0, "medium");
+
+    expect(isValidPizza(pizza)).toBe(false);
+  }); */
 });
