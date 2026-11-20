@@ -53,3 +53,8 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 ## Question: Would a 100% threshold be a good idea? Use your Week 10 coverage answer.
 
 - Answer: No, a 100% threshold is not always a good idea. It can take too much time and does not guarantee that the code has no bugs. Test coverage only shows how much code is tested, not how good the tests are. An 80% threshold is a more realistic goal. It is important to test important functionality, edge cases, and error paths rather than focusing only on reaching 100%
+
+
+# Exercise 9: CI for your Sentry API
+
+## Question: What does Sentry do without a DSN? If CI did need the DSN, where would it go?
