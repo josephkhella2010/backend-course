@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { createPizza, calculatePizzaPrice, isValidPizza } from "../src/pizza.js";
+import {
+  createPizza,
+  calculatePizzaPrice,
+  isValidPizza,
+} from "../src/pizza.js";
 
 describe("Pizza functions", () => {
   it("creates a pizza", () => {
