@@ -15,4 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+        working-directory: ./week12-ci 
+        
       - run: npm test
