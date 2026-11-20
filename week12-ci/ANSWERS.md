@@ -1,13 +1,21 @@
 # Exercise 1: Your first workflow
 
-
 ## Question: What do on, runs-on, strategy.matrix and steps do? Why did nothing happen when you only pushed the branch?
 
 ### Answer:
+
 - on: Defines which events trigger the workflow, such as a push or pull request.
 - runs-on: Specifies the operating system used to run the workflow, for example ubuntu-latest.
 - strategy.matrix: Runs the same job with different configurations, such as different Node.js versions.
 - steps: Lists the tasks performed by the workflow, such as installing dependencies and running tests.
-Nothing happened when I first pushed because the workflow was configured to run only on the main branch, but I pushed to week12/ci. I fixed this by changing the branch filter to week12/ci.
+  Nothing happened when I first pushed because the workflow was configured to run only on the main branch, but I pushed to week12/ci. I fixed this by changing the branch filter to week12/ci.
 
 # Exercise 2: Read the report.
+
+## Question: Why can a test pass on your laptop but fail in CI? Think of why the video's first run failed.
+
+Answer: A test can pass on my laptop but fail in CI because the environments may be different. My laptop might have dependencies or files that are missing in CI, or the Node.js versions may be different. CI starts with a clean environment, so it can reveal problems that were not visible on my laptop.
+
+# Exercise 3: Red on purpose
+
+## Question: Why is a red cross on the pull request better than one after merging?
