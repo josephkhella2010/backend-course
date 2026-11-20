@@ -39,3 +39,5 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 # Exercise 6: Protect week12/ci
 
 ## Question: What does branch protection do that CI alone can't?
+
+- Answer: CI automatically runs tests and checks the code to see if there are errors. Branch protection adds rules that prevent changes from being merged into a protected branch unless certain conditions are met, such as opening a pull request and passing all required CI checks.
