@@ -25,8 +25,4 @@ describe("Pizza functions", () => {
 
     expect(isValidPizza(pizza)).toBe(true);
   });
-
-  it("fails on purpose", () => {
-    expect(1).toBe(2);
-  });
 });
