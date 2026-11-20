@@ -29,3 +29,9 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 ## Question: Would this step have caught the possibly null bug from Week 11, Exercise 9?
 
 - Answer: Yes, if TypeScript's strict null checking is enabled. The typecheck step can detect when a value might be null or undefined before the code runs. This helps catch errors early.
+
+# Exercise 5: Pick your Node versions
+
+## Question: What's the difference between npm ci and npm install, and why does CI use npm ci?
+
+- Answer: npm install installs dependencies and can update package-lock.json when necessary. npm ci installs the exact dependency versions recorded in the lockfile without changing it. CI uses npm ci because it provides clean, consistent and reproducible installations.
