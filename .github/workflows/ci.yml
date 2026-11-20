@@ -32,8 +32,13 @@ jobs:
       - run: npm run typecheck
         working-directory: ./week12-ci
 
+      - run: npm run typecheck
+        working-directory: ./week12-ci
+  
+
       - run: npm run build --if-present
         working-directory: ./week12-ci
 
+        
       - run: npm test
         working-directory: ./week12-ci
