@@ -14,8 +14,12 @@
 
 ## Question: Why can a test pass on your laptop but fail in CI? Think of why the video's first run failed.
 
-Answer: A test can pass on my laptop but fail in CI because the environments may be different. My laptop might have dependencies or files that are missing in CI, or the Node.js versions may be different. CI starts with a clean environment, so it can reveal problems that were not visible on my laptop.
+- Answer: A test can pass on my laptop but fail in CI because the environments may be different. My laptop might have dependencies or files that are missing in CI, or the Node.js versions may be different. CI starts with a clean environment, so it can reveal problems that were not visible on my laptop.
 
 # Exercise 3: Red on purpose
 
 ## Question: Why is a red cross on the pull request better than one after merging?
+
+- Answer: It is better because CI detects errors before the code is merged into the main branch. This allows developers to fix problems early and prevents broken code from affecting the project.
+
+Take a screenshot of the successful Actions run for your assignment. Is the newest run green?
