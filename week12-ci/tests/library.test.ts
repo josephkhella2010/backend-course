@@ -42,4 +42,13 @@ describe("Library functions", () => {
 
     expect(result[0]?.available).toBe(false);
   });
+
+   it("throws an error when the book does not exist", () => {
+    expect(() => borrowBook(books, "Unknown Book")).toThrow("Book not found");
+  }); 
+
+  it("throws an error when the book is already borrowed", () => {
+    expect(() => borrowBook(books, "Book B")).toThrow("Book is not available");
+  });
+ 
 });
