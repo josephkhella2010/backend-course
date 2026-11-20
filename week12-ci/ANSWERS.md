@@ -23,3 +23,9 @@
 - Answer: It is better because CI detects errors before the code is merged into the main branch. This allows developers to fix problems early and prevents broken code from affecting the project.
 
 Take a screenshot of the successful Actions run for your assignment. Is the newest run green?
+
+# Exercise 4: Check types in CI
+
+## Question: Would this step have caught the possibly null bug from Week 11, Exercise 9?
+
+- 
