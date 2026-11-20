@@ -17,5 +17,3 @@ export function borrowBook(books: Book[], title: string): Book[] {
     book.title === title ? { ...book, available: false } : book,
   );
 }
-
-const copies: number = "three";
