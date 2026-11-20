@@ -28,4 +28,4 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 
 ## Question: Would this step have caught the possibly null bug from Week 11, Exercise 9?
 
-- 
+- Answer: Yes, if TypeScript's strict null checking is enabled. The typecheck step can detect when a value might be null or undefined before the code runs. This helps catch errors early.
