@@ -15,7 +15,7 @@ export function createPizza(
 export function calculatePizzaPrice(pizza: Pizza, quantity: number): number {
   return pizza.price * quantity;
 }
-
+///
 export function isValidPizza(pizza: Pizza): boolean {
   return pizza.name.trim().length > 0 && pizza.price > 0;
 }
