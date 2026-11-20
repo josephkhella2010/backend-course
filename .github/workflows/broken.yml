@@ -18,5 +18,6 @@ jobs:
 
       - run: npm ci
         working-directory: ./week12-ci 
-        
+
       - run: npm test
+        working-directory: ./week12-ci
