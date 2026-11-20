@@ -42,8 +42,8 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 
 - Answer: CI automatically runs tests and checks the code to see if there are errors. Branch protection adds rules that prevent changes from being merged into a protected branch unless certain conditions are met, such as opening a pull request and passing all required CI checks.
 
-# Exercise 7: Fix the broken workflow. 
+# Exercise 7: Fix the broken workflow.
 
-## Question: Which bug was the most dangerous, and why?
+### Question: Which bug was the most dangerous, and why?
 
 - Answer: The most dangerous bug was the wrong branch filter (master instead of week12/ci). This could prevent the workflow from running on pull requests targeting week12/ci. As a result, code could be merged without being tested by this workflow, giving a false sense of security.
