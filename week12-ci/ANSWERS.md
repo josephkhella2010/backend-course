@@ -35,3 +35,7 @@ Take a screenshot of the successful Actions run for your assignment. Is the newe
 ## Question: What's the difference between npm ci and npm install, and why does CI use npm ci?
 
 - Answer: npm install installs dependencies and can update package-lock.json when necessary. npm ci installs the exact dependency versions recorded in the lockfile without changing it. CI uses npm ci because it provides clean, consistent and reproducible installations.
+
+# Exercise 6: Protect week12/ci
+
+## Question: What does branch protection do that CI alone can't?
