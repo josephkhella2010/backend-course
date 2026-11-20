@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { createPizza, calculatePizzaPrice, isValidPizza } from "../src/pizza.js";
+import {
+  createPizza,
+  calculatePizzaPrice,
+  isValidPizza,
+} from "../src/pizza.js";
 
 describe("Pizza functions", () => {
   it("creates a pizza", () => {
@@ -20,5 +24,8 @@ describe("Pizza functions", () => {
     const pizza = createPizza("Margherita", 100, "medium");
 
     expect(isValidPizza(pizza)).toBe(true);
+  });
+  it("fails on purpose", () => {
+    expect(1).toBe(2);
   });
 });
