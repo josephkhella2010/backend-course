@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
-node_module
+node_modules/
+package-lock.json
+package.json
