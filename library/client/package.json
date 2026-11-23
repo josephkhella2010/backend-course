@@ -13,6 +13,7 @@
     "axios": "^1.21.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "react-jss": "^10.10.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
